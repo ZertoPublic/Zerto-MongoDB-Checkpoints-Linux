@@ -35,7 +35,7 @@ echo $SESSION >> ZertoCheckpointInsert.log
 echo "---------------------------------" >> ZertoCheckpointInsert.log
 #VPGLIST=$(curl -k -H "${SESSION}" -H "Content-Type: application/json" -H "Accept: application/json" https://${ZVMIP}:${ZVMPORT}/v1/vpgs)
 
-##### Lock and Flush MySQL Databases #####
+##### Lock and Flush MongoDB Databases #####
 outputLock=$(mongo -u ${MONGOUSER} -p ${MONGOPASSWORD} --authenticationDatabase admin --eval 'db.fsyncLock()' 2>&1)
 echo $outputLock >> ZertoCheckpointInsert.log
 
@@ -43,6 +43,6 @@ echo $outputLock >> ZertoCheckpointInsert.log
 INSERTOUTPUT=$(curl -k -H "${SESSION}" -H "Content-Type: application/json" -H "Accept: application/json" -X POST -d '{"checkpointName":"MongoDB Quiesced Checkpoint"}' https://${ZVMIP}:${ZVMPORT}/v1/vpgs/"${VPGID}"/Checkpoints)
 echo $responseHeader >> ZertoCheckpointInsert.log
 
-##### Lock and Flush MySQL Databases #####
+##### Lock and Flush MongoDB Databases #####
 outputUnlock=$(mongo -u ${MONGOUSER} -p ${MONGOPASSWORD} --authenticationDatabase admin --eval 'db.fsyncUnlock()' 2>&1)
 echo $outputUnlock >> ZertoCheckpointInsert.log
